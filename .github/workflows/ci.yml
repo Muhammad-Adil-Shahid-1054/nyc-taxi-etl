@@ -26,6 +26,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # 4. Run the Pipeline!
+    # 4. (NEW) Create the missing data folders so the script doesn't crash
+    - name: Create Data Folders
+      run: mkdir -p data/bronze data/silver data/gold
+
+    # 5. Run the Pipeline!
     - name: Run ETL Pipeline
       run: python main.py
