@@ -1,35 +1,33 @@
 name: NYC Taxi Pipeline CI
 
-# Trigger: Run this whenever I push code to the 'main' branch
 on:
   push:
     branches: [ "main" ]
 
 jobs:
   build-and-run:
-    runs-on: ubuntu-latest  # Use a Linux server provided by GitHub
+    runs-on: ubuntu-latest
 
     steps:
-    # 1. Download the code from your repo
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Install Python 3.9
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.9"
 
-    # 3. Install your libraries (Pandas, DuckDB)
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # 4. (NEW) Create the missing data folders so the script doesn't crash
     - name: Create Data Folders
       run: mkdir -p data/bronze data/silver data/gold
 
-    # 5. Run the Pipeline!
     - name: Run ETL Pipeline
       run: python main.py
+
+    # 👇 NEW STEP: Run the tests automatically
+    - name: Run Data Quality Tests
+      run: pytest tests/
